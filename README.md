@@ -47,6 +47,9 @@ pip install -r requirements.txt
 
 # Run the app
 streamlit run app.py
+```
+
+---
 
 ## 🗂️ Project Structure
 
@@ -67,32 +70,44 @@ dataagentx/
 
 ---
 
-## 📁 Deployment (Hugging Face Spaces)
+## ☁️ Deployment (Hugging Face Spaces)
 
-**Step-by-step:**
+**Steps:**
 
-1. Go to [https://huggingface.co/spaces](https://huggingface.co/spaces)
-2. Create a new **Space** → choose `Docker` + `Streamlit`
-3. Upload all project files: `app.py`, `requirements.txt`, `utils/`, `.streamlit/`, `reports/`
-4. In your Docker `Dockerfile`, use:
+1. Visit [https://huggingface.co/spaces](https://huggingface.co/spaces)  
+2. Click **Create New Space** → Choose `Docker` + `Streamlit`  
+3. Upload the entire project folder including:
+   - `app.py`
+   - `requirements.txt`
+   - `.streamlit/config.toml`
+   - `utils/` and `reports/` folders
+
+4. Add the following `Dockerfile` to your repo:
 
 ```dockerfile
 FROM python:3.9
+
 WORKDIR /app
 COPY . .
+
 RUN pip install -r requirements.txt
+
 CMD ["streamlit", "run", "app.py", "--server.port=7860", "--server.address=0.0.0.0"]
 ```
 
+5. Done! Your app should go live shortly.
+
 ---
 
-## 🧠 Future Improvements
+## 📌 Roadmap
 
-- ✅ Add LLM-based dataset tag generation (via OpenAI or local models)
-- ✅ Add support for sorting/filtering results
-- ✅ Add dataset preview (first few rows for CSVs, etc.)
-- ✅ Save past searches and reports
-- ⏳ Add direct Kaggle downloader (via API token)
+- ✅ Hugging Face + Kaggle Search
+- ✅ Markdown Report Export
+- ✅ Hugging Face dataset downloader
+- ✅ Hugging Face Spaces deployment
+- 🔄 LLM-based tag summarization module
+- ⏳ Dataset preview and advanced filters
+- ⏳ Search history and saved bookmarks
 
 ---
 
@@ -105,5 +120,7 @@ This project is licensed under the [MIT License](LICENSE).
 ## 🙋‍♀️ Author
 
 **Mufitha Majeed**  
-🔗 [GitHub](https://github.com/mufithamajeed) | 🧠 [Hugging Face Spaces](https://huggingface.co/spaces/mufithamajeed)
+🔗 [GitHub](https://github.com/mufithamajeed)  
+🌐 [Hugging Face Spaces](https://huggingface.co/spaces/mufithamajeed)
 
+---
