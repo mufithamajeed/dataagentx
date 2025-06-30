@@ -47,3 +47,63 @@ pip install -r requirements.txt
 
 # Run the app
 streamlit run app.py
+
+## 🗂️ Project Structure
+
+```
+dataagentx/
+│
+├── app.py                   # Streamlit frontend
+├── requirements.txt         # Python dependencies
+├── .streamlit/              # Theme & config settings
+│   └── config.toml
+├── reports/                 # Saved markdown reports
+├── utils/                   # Search logic scripts
+│   ├── search_hf.py         # Hugging Face search
+│   ├── search_kaggle.py     # Kaggle search
+│   └── llm_tagger.py        # [Optional] LLM-based tag generator
+└── README.md
+```
+
+---
+
+## 📁 Deployment (Hugging Face Spaces)
+
+**Step-by-step:**
+
+1. Go to [https://huggingface.co/spaces](https://huggingface.co/spaces)
+2. Create a new **Space** → choose `Docker` + `Streamlit`
+3. Upload all project files: `app.py`, `requirements.txt`, `utils/`, `.streamlit/`, `reports/`
+4. In your Docker `Dockerfile`, use:
+
+```dockerfile
+FROM python:3.9
+WORKDIR /app
+COPY . .
+RUN pip install -r requirements.txt
+CMD ["streamlit", "run", "app.py", "--server.port=7860", "--server.address=0.0.0.0"]
+```
+
+---
+
+## 🧠 Future Improvements
+
+- ✅ Add LLM-based dataset tag generation (via OpenAI or local models)
+- ✅ Add support for sorting/filtering results
+- ✅ Add dataset preview (first few rows for CSVs, etc.)
+- ✅ Save past searches and reports
+- ⏳ Add direct Kaggle downloader (via API token)
+
+---
+
+## 📜 License
+
+This project is licensed under the [MIT License](LICENSE).
+
+---
+
+## 🙋‍♀️ Author
+
+**Mufitha Majeed**  
+🔗 [GitHub](https://github.com/mufithamajeed) | 🧠 [Hugging Face Spaces](https://huggingface.co/spaces/mufithamajeed)
+
