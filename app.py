@@ -12,14 +12,34 @@ from datasets import load_dataset
 # === Page Config ===
 st.set_page_config(page_title="🧠 DataAgentX", layout="centered")
 
-# === Theme Toggle ===
-theme = st.radio("🌓 Choose Theme:", ["Light", "Dark"])
-if theme == "Dark":
-    st.markdown("""
-        <style>
-        body { background-color: #0e1117; color: #fafafa; }
-        </style>
-    """, unsafe_allow_html=True)
+# === Save Report Function ===
+def save_report(results, query, source):
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    filename = f"dataset_report_{source.lower()}_{timestamp}.md"
+    full_path = os.path.join("reports", filename)
+
+    buffer = StringIO()
+    buffer.write(f"# Dataset Search Report\n")
+    buffer.write(f"**Query**: {query}\n")
+    buffer.write(f"**Source**: {source}\n\n")
+
+    for i, r in enumerate(results):
+        title = r.get("title", r.get("name", f"Dataset {i+1}"))
+        description = r.get("description", "No description available")
+        url = r.get("url", "No link")
+        tags = generate_tags(description)
+
+        buffer.write(f"## {title}\n")
+        buffer.write(f"**Link**: {url}\n\n")
+        buffer.write(f"**Description**:\n{description}\n\n")
+        buffer.write(f"**Tags/Summary**:\n{tags}\n\n")
+        buffer.write("-" * 40 + "\n")
+
+    os.makedirs("reports", exist_ok=True)
+    with open(full_path, "w", encoding="utf-8") as f:
+        f.write(buffer.getvalue())
+
+    return filename, buffer.getvalue()
 
 st.title("🧠 DataAgentX – AI-Powered Dataset Finder")
 
@@ -64,7 +84,7 @@ if search_btn and query.strip():
                     except Exception as e:
                         st.warning(f"⚠️ Failed to download: {str(e)}")
 
-        # === Export Report
+        # === Export Report ===
         filename, file_content = save_report(results, query, source)
         st.success(f"Report saved as `{filename}` and ready to download.")
         st.download_button(
@@ -73,32 +93,3 @@ if search_btn and query.strip():
             file_name=filename,
             mime="text/markdown"
         )
-
-
-# === Save Report Function ===
-def save_report(results, query, source):
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    filename = f"dataset_report_{source.lower()}_{timestamp}.md"
-    full_path = os.path.join("reports", filename)
-
-    buffer = StringIO()
-    buffer.write(f"# Dataset Search Report\n")
-    buffer.write(f"**Query**: {query}\n")
-    buffer.write(f"**Source**: {source}\n\n")
-
-    for i, r in enumerate(results):
-        title = r.get("title", r.get("name", f"Dataset {i+1}"))
-        description = r.get("description", "No description available")
-        url = r.get("url", "No link")
-        tags = generate_tags(description)
-
-        buffer.write(f"## {title}\n")
-        buffer.write(f"**Link**: {url}\n\n")
-        buffer.write(f"**Description**:\n{description}\n\n")
-        buffer.write(f"**Tags/Summary**:\n{tags}\n\n")
-        buffer.write("-" * 40 + "\n")
-
-    with open(full_path, "w", encoding="utf-8") as f:
-        f.write(buffer.getvalue())
-
-    return filename, buffer.getvalue()
