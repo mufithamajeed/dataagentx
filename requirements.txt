@@ -4,3 +4,6 @@ datasets
 pandas
 kaggle
 python-dotenv
+requests
+huggingface_hub
+torch
