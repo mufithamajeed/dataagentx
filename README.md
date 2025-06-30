@@ -1,126 +1,161 @@
 # 🧠 DataAgentX
 
-**AI-Powered Dataset Finder using Streamlit + Hugging Face + Kaggle**
+**AI-Powered Dataset Discovery Tool** for Kaggle & Hugging Face  
+Built with Streamlit • Zero-Shot Classification • LLM-Generated Tags • Markdown Reporting
+
+### 📸 Demo Screenshots
+
+#### 🔍 Initial Search Interface  
+This is the first screen where the user enters a dataset topic and chooses a source (Hugging Face or Kaggle).
+
+![Search Interface](https://huggingface.co/spaces/mufithamajeed/dataagentx/resolve/main/App%20screenshot%201.png)
 
 ---
 
-## 🔍 Overview
+#### ✅ Search Results — Multiple Datasets Found  
+This screen shows the result of the query with multiple datasets listed.
 
-**DataAgentX** is a Streamlit-based web application that helps researchers, developers, and data enthusiasts discover relevant datasets from Hugging Face and Kaggle based on a simple keyword query.
-
-It integrates:
-- 🧠 Large Language Model (LLM) tagging (optional module)
-- 🔍 Search across Hugging Face Hub and Kaggle Datasets
-- 📄 Auto-generated markdown reports
-- 🌙 Light/Dark mode toggle
-- 📥 Dataset downloader
-- 🚀 One-click deployment on Hugging Face Spaces
+![Search Results](https://huggingface.co/spaces/mufithamajeed/dataagentx/resolve/main/App%20screenshot%202.png)
 
 ---
 
-## 🖥️ Features
+#### 🧠 Dataset Details with Tags and News Links  
+Here, the user sees the dataset description, smart tags generated using LLMs, and external reference links.
 
-- **Keyword Search**: Type any topic (e.g., "climate", "healthcare") and get results instantly.
-- **Multi-source Support**: Choose between Hugging Face or Kaggle as your dataset source.
-- **Auto Report Generator**: Export your dataset search results into a markdown report.
-- **Tag Generator (LLM)**: [Coming soon] Summarizes dataset descriptions into tags using an LLM.
-- **Dark Mode Toggle**: Switch between light and dark modes.
-- **Download Button**: Download datasets directly (Hugging Face only).
-- **Streamlit Interface**: Fully interactive and easy to use.
-- **Free Deployment**: Host your app on Hugging Face Spaces for free!
+![Tags and News](https://huggingface.co/spaces/mufithamajeed/dataagentx/resolve/main/App%20screenshot%203.png)
 
 ---
 
-## 🚀 Quickstart (Local)
 
+## 🚀 Overview
+
+**DataAgentX** is a Streamlit-based tool that simplifies dataset discovery and selection using intelligent search and LLM tagging. It empowers data scientists, ML researchers, and developers to:
+
+- 🔍 Search for datasets on **Hugging Face** or **Kaggle**
+- 🧠 Generate **AI-based tags** using zero-shot classification (BART-MNLI)
+- 📥 Download datasets to a local `/data/raw/` directory
+- 📝 Export a professional markdown report of search results
+
+---
+
+## 📦 Features
+
+- ✅ Hugging Face & Kaggle dataset search
+- 🔍 Zero-shot classification of dataset descriptions via `transformers` pipelines
+- 🧠 Automatic tagging with `facebook/bart-large-mnli`
+- 📄 Report generator in markdown format
+- 📥 Dataset downloader to `/data/raw/`
+- 🧼 Clean Streamlit UI with theme switcher
+- 🐳 Fully Dockerized
+- 🚀 Deployable on [Hugging Face Spaces](https://huggingface.co/spaces)
+
+---
+
+## 🧑‍💻 Getting Started Locally
+
+### 1. Clone the Repository
 ```bash
-# Clone the repository
 git clone https://github.com/mufithamajeed/dataagentx.git
 cd dataagentx
+```
 
-# Create a virtual environment
-python -m venv env
-# Activate it (Windows)
-.\env\Scripts\activate
-# Install dependencies
+### 2. Set Up Kaggle API Credentials
+
+- Visit: [https://www.kaggle.com/account](https://www.kaggle.com/account)
+- Create a new API token and download `kaggle.json`
+
+Place the file in:
+```bash
+~/.kaggle/kaggle.json
+```
+
+Or set credentials via environment variables:
+```bash
+export KAGGLE_USERNAME=your_username
+export KAGGLE_KEY=your_key
+```
+
+### 3. Install Requirements
+```bash
 pip install -r requirements.txt
+```
 
-# Run the app
+### 4. Run the App
+```bash
 streamlit run app.py
 ```
 
 ---
 
-## 🗂️ Project Structure
+## 🐳 Run with Docker
+
+### Build the image
+```bash
+docker build -t dataagentx .
+```
+
+### Run the container
+```bash
+docker run -p 8501:8501 dataagentx
+```
+
+---
+
+## 🗂 File Structure
 
 ```
 dataagentx/
 │
-├── app.py                   # Streamlit frontend
-├── requirements.txt         # Python dependencies
-├── .streamlit/              # Theme & config settings
-│   └── config.toml
-├── reports/                 # Saved markdown reports
-├── utils/                   # Search logic scripts
-│   ├── search_hf.py         # Hugging Face search
-│   ├── search_kaggle.py     # Kaggle search
-│   └── llm_tagger.py        # [Optional] LLM-based tag generator
-└── README.md
+├── app.py                    # Main Streamlit app
+├── agents/
+│   └── llm_tagger.py         # LLM tag generation (zero-shot)
+├── utils/
+│   ├── search_hf.py          # Hugging Face dataset search
+│   └── search_kaggle.py      # Kaggle dataset search
+├── reports/                  # Markdown reports saved here
+├── requirements.txt          # Python dependencies
+└── Dockerfile                # For container deployment
 ```
 
 ---
 
-## ☁️ Deployment (Hugging Face Spaces)
+## 📄 Example Output
 
-**Steps:**
+**Tags + Download + Report**
 
-1. Visit [https://huggingface.co/spaces](https://huggingface.co/spaces)  
-2. Click **Create New Space** → Choose `Docker` + `Streamlit`  
-3. Upload the entire project folder including:
-   - `app.py`
-   - `requirements.txt`
-   - `.streamlit/config.toml`
-   - `utils/` and `reports/` folders
-
-4. Add the following `Dockerfile` to your repo:
-
-```dockerfile
-FROM python:3.9
-
-WORKDIR /app
-COPY . .
-
-RUN pip install -r requirements.txt
-
-CMD ["streamlit", "run", "app.py", "--server.port=7860", "--server.address=0.0.0.0"]
-```
-
-5. Done! Your app should go live shortly.
+![Example](https://huggingface.co/spaces/mufithamajeed/dataagentx/resolve/main/App%20screenshot%203.png)
 
 ---
 
-## 📌 Roadmap
+## 📚 Tech Stack
 
-- ✅ Hugging Face + Kaggle Search
-- ✅ Markdown Report Export
-- ✅ Hugging Face dataset downloader
-- ✅ Hugging Face Spaces deployment
-- 🔄 LLM-based tag summarization module
-- ⏳ Dataset preview and advanced filters
-- ⏳ Search history and saved bookmarks
-
----
-
-## 📜 License
-
-This project is licensed under the [MIT License](LICENSE).
+- [Streamlit](https://streamlit.io/)
+- [Hugging Face Transformers](https://huggingface.co/docs/transformers)
+- [Kaggle API](https://github.com/Kaggle/kaggle-api)
+- [Hugging Face Datasets](https://huggingface.co/docs/datasets)
+- [Docker](https://www.docker.com/)
+- Python 3.9+
 
 ---
 
-## 🙋‍♀️ Author
+## 🌍 Live Demo
 
-**Mufitha Majeed**  
-🔗 [GitHub](https://github.com/mufithamajeed)  
-🌐 [Hugging Face Spaces](https://huggingface.co/spaces/mufithamajeed)
+Try it live on [Hugging Face Spaces](https://huggingface.co/spaces/mufithamajeed/dataagentx)
 
 ---
+
+## 📄 License
+
+This project is licensed under the **MIT License**.
+
+---
+
+## 🙌 Acknowledgements
+
+Developed by [Mufitha Majeed](https://github.com/mufithamajeed)  
+LLM-powered tagging powered by 🤗 `facebook/bart-large-mnli`
+
+---
+
+> Made with 💡 by combining AI and Open-Source
+
